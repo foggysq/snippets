@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Snippets Creator - Generate Code Snippets for VS Code, Cursor, PHPStorm, WebStorm, Sublime Text  & Vim</title>
+    <meta name="description" content="Create custom code snippets for VS Code, Sublime Text, PHPStorm, WebStorm, and Vim from SCSS variables. Generate autocomplete snippets for CSS, SCSS, JavaScript, TypeScript, JSX, and TSX files with our easy-to-use snippet generator tool.">
+    <meta name="keywords" content="code snippets, VS Code snippets, Sublime Text completions, PHPStorm templates, Vim snippets, SCSS variables, CSS snippets, JavaScript snippets, TypeScript snippets, autocomplete, code generator">
+    <meta name="author" content="Style Snippets Creator">
+    <meta property="og:title" content="Style Snippets Creator - Generate Code Snippets for Multiple IDEs">
+    <meta property="og:description" content="Transform your SCSS variables into code snippets for VS Code, Sublime Text, PHPStorm, and Vim. Support for CSS, SCSS, JavaScript, TypeScript, JSX, and TSX files.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Style Snippets Creator - Generate Code Snippets for Multiple IDEs">
+    <meta name="twitter:description" content="Transform your SCSS variables into code snippets for VS Code, Sublime Text, PHPStorm, and Vim.">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #007acc 0%, #0056b3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+        
+        .left-panel, .right-panel {
+            padding: 30px;
+        }
+        
+        .left-panel {
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        
+        .file-extensions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #007acc;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #007acc 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 122, 204, 0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .example-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: transparent;
+            color: #007acc;
+            border: 2px solid #007acc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+        }
+        
+        .example-btn:hover {
+            background: #007acc;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .example-btn:active {
+            transform: translateY(0);
+        }
+        
+        .ide-selector {
+            margin-bottom: 20px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            padding-right: 40px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-box strong {
+            color: #1976d2;
+        }
+        
+        .result-container {
+            position: relative;
+        }
+        
+        .copy-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn.copied {
+            background: #6c757d;
+        }
+        
+        .result-textarea {
+            height: 350px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            background: #f8f9fa;
+        }
+        
+        .author-footer {
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px 30px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .author-footer a {
+            color: #007acc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .author-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 4px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .language-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .language-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .file-extensions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-switch">
+                <button class="language-btn active" onclick="switchLanguage('en')" id="langEn">EN</button>
+                <button class="language-btn" onclick="switchLanguage('ru')" id="langRu">RU</button>
+            </div>
+            <h1 id="mainTitle">Style Snippets Creator</h1>
+            <p id="mainSubtitle">Generate code snippets for your favorite IDE</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="form-group">
+                    <label for="snippetTitle" id="labelSnippetTitle">Snippets Set Title</label>
+                    <input type="text" id="snippetTitle" placeholder="e.g., My Design System" value="Design System">
+                </div>
+                
+                <div class="form-group">
+                    <label id="labelFileExtensions">File Extensions</label>
+                    <div class="file-extensions">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="css" checked>
+                            <label for="css">CSS</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="scss" checked>
+                            <label for="scss">SCSS</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="js">
+                            <label for="js">JS</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="jsx">
+                            <label for="jsx">JSX</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ts">
+                            <label for="ts">TS</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tsx">
+                            <label for="tsx">TSX</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="source" id="labelSource">SCSS/CSS Variables Input</label>
+                    <textarea id="source" placeholder="Enter your SCSS variables or CSS custom properties here...&#10;&#10;Modern Design System Examples:&#10;&#10;// SCSS Variables&#10;$primary-500: #3b82f6;&#10;$error-500: #ef4444;&#10;$btn-primary: $primary-500;&#10;&#10;// CSS Custom Properties (Native CSS Variables)&#10;--text-primary: #1f2937;&#10;--text-secondary: #6b7280;&#10;--text-muted: #9ca3af;&#10;--bg-primary: #ffffff;&#10;--bg-secondary: #f9fafb;&#10;--bg-muted: #f3f4f6;&#10;&#10;// Typography&#10;$font-size-xs: 12px;&#10;$font-size-sm: 14px;&#10;$font-size-base: 16px;&#10;$font-size-lg: 18px;&#10;$font-size-xl: 20px;&#10;$font-weight-normal: 400;&#10;$font-weight-medium: 500;&#10;$font-weight-semibold: 600;&#10;&#10;--font-family-sans: 'Inter', system-ui, sans-serif;&#10;--font-family-mono: 'Fira Code', 'Monaco', monospace;&#10;--line-height-tight: 1.25;&#10;--line-height-normal: 1.5;&#10;--line-height-relaxed: 1.75;&#10;&#10;// Spacing&#10;$spacing-xs: 4px;&#10;$spacing-sm: 8px;&#10;$spacing-md: 16px;&#10;$spacing-lg: 24px;&#10;$spacing-xl: 32px;&#10;&#10;--space-1: 0.25rem;&#10;--space-2: 0.5rem;&#10;--space-3: 0.75rem;&#10;--space-4: 1rem;&#10;--space-6: 1.5rem;&#10;--space-8: 2rem;&#10;&#10;// Border Radius&#10;$radius-sm: 4px;&#10;$radius-md: 8px;&#10;$radius-lg: 12px;&#10;$radius-full: 9999px;&#10;&#10;--radius-sm: 0.125rem;&#10;--radius-md: 0.375rem;&#10;--radius-lg: 0.5rem;&#10;--radius-xl: 0.75rem;&#10;&#10;// Shadows&#10;$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);&#10;$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);&#10;$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);&#10;&#10;--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);&#10;--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);&#10;--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);&#10;&#10;// Breakpoints&#10;$breakpoint-sm: 640px;&#10;$breakpoint-md: 768px;&#10;$breakpoint-lg: 1024px;&#10;$breakpoint-xl: 1280px;&#10;&#10;--breakpoint-sm: 40rem;&#10;--breakpoint-md: 48rem;&#10;--breakpoint-lg: 64rem;&#10;--breakpoint-xl: 80rem;"></textarea>
+                </div>
+                
+                <button class="example-btn" onclick="useExampleData()" id="exampleBtn">Use Example Data</button>
+                <button class="generate-btn" onclick="createSnippets()" id="generateBtn">Generate Snippets</button>
+            </div>
+            
+            <div class="right-panel">
+                <div class="ide-selector">
+                    <label for="ideSelect" id="labelChooseIDE">Choose your IDE</label>
+                    <select id="ideSelect" onchange="updateIDEInfo()">
+                        <option value="vscode">VS Code / Cursor</option>
+                        <option value="phpstorm">PHPStorm / WebStorm</option>
+                        <option value="sublime">Sublime Text</option>
+                        <option value="vim">Vim / Neovim</option>
+                    </select>
+                </div>
+                
+                <div class="info-box" id="ideInfo">
+                    <strong>VS Code Instructions:</strong><br>
+                    Create snippet file via File → Preferences → User Snippets → New Global Snippets File (enter filename), paste there the result, Save.
+                </div>
+                
+                <div class="result-container">
+                    <textarea id="result" class="result-textarea" placeholder="Generated snippets will appear here..." readonly></textarea>
+                    <button class="copy-btn" onclick="copyResult()">Copy Result</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="author-footer" id="authorFooter">
+            Created by <a href="https://github.com/foggysq" target="_blank" rel="noopener">Roman Torshin</a>
+        </div>
+    </div>
+</body>
+<script>
+        // Language management
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                mainTitle: 'Style Snippets Creator',
+                mainSubtitle: 'Generate code snippets for your favorite IDE',
+                snippetTitle: 'Snippets Set Title',
+                fileExtensions: 'File Extensions',
+                sourceInput: 'SCSS Variables Input',
+                chooseIDE: 'Choose your IDE',
+                generateBtn: 'Generate Snippets',
+                exampleBtn: 'Use Example Data',
+                copyBtn: 'Copy Result',
+                copyResults: 'Copy Results',
+                copied: 'Copied!',
+                vscodeInstructions: 'VS Code Instructions:',
+                sublimeInstructions: 'Sublime Text Instructions:',
+                phpstormInstructions: 'PHPStorm Instructions:',
+                vimInstructions: 'Vim / Neovim Instructions:',
+                vscodeText: 'Create snippet file via File → Preferences → User Snippets / Configure snippets → New Global Snippets File (enter filename), paste there the result, save.',
+                sublimeText: 'Create autocomplete file in your Sublime Text packages directory. Save as .sublime-completions file. Paste there the result, save.',
+                phpstormText: 'Save settings via File → Manage IDE Settings → Export Settings, open archive, create Variables.xml file in templates folder, paste there the result, save. Import settings archive via File → Manage IDE Settings → Import Settings.',
+                vimText: 'Create snippet file in your Vim/Neovim config directory (e.g., ~/.config/nvim/snippets/). Save as .snippets file, paste there the result, save. Configure your snippet plugin (like UltiSnips or LuaSnip) to load it.',
+                enterVariables: 'Please enter some SCSS or CSS variables to generate snippets.',
+                selectExtension: 'Please select at least one file extension.',
+                author: 'Created by'
+            },
+            ru: {
+                mainTitle: 'Генератор сниппетов стилей',
+                mainSubtitle: 'Создавайте сниппеты кода для вашей IDE',
+                snippetTitle: 'Название набора сниппетов',
+                fileExtensions: 'Расширения файлов',
+                sourceInput: 'Ввод SCSS или CSS переменных',
+                chooseIDE: 'Выберите вашу IDE',
+                generateBtn: 'Генерировать сниппеты',
+                exampleBtn: 'Использовать пример',
+                copyBtn: 'Копировать',
+                copyResults: 'Копировать результаты',
+                copied: 'Скопировано!',
+                vscodeInstructions: 'Инструкции для VS Code:',
+                sublimeInstructions: 'Инструкции для Sublime Text:',
+                phpstormInstructions: 'Инструкции для PHPStorm:',
+                vimInstructions: 'Инструкции для Vim / Neovim:',
+                vscodeText: 'Создайте файл сниппетов через File → Preferences → User Snippets / Configure snippets → New Global Snippets File (введите название файла), вставьте сгенерированный результат, сохраните.',
+                sublimeText: 'Создайте файл автодополнения в директории пакетов Sublime Text. Сохраните как .sublime-completions файл. Вставьте сгенерированный результат, сохраните.',
+                phpstormText: 'Сохраните настройки через File → Manage IDE Settings → Export Settings, откройте архив, создайте файл Variables.xml в папке templates, вставьте сгенерированный результат, сохраните. Импортируйте архив настроек через File → Manage IDE Settings → Import Settings.',
+                vimText: 'Создайте файл сниппетов в директории конфигурации Vim/Neovim (например, ~/.config/nvim/snippets/). Сохраните как .snippets файл и настройте ваш плагин сниппетов (например, UltiSnips или LuaSnip) для его загрузки.',
+                enterVariables: 'Пожалуйста, введите SCSS или CSS переменные для генерации сниппетов.',
+                selectExtension: 'Пожалуйста, выберите хотя бы одно расширение файла.',
+                author: 'Автор'
+            }
+        };
+        
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+            document.getElementById('langRu').classList.toggle('active', lang === 'ru');
+            
+            // Update all text elements
+            const t = translations[lang];
+            document.getElementById('mainTitle').textContent = t.mainTitle;
+            document.getElementById('mainSubtitle').textContent = t.mainSubtitle;
+            document.getElementById('labelSnippetTitle').textContent = t.snippetTitle;
+            document.getElementById('labelFileExtensions').textContent = t.fileExtensions;
+            document.getElementById('labelSource').textContent = t.sourceInput;
+            document.getElementById('labelChooseIDE').textContent = t.chooseIDE;
+            document.getElementById('generateBtn').textContent = t.generateBtn;
+            document.getElementById('exampleBtn').textContent = t.exampleBtn;
+            
+            // Update copy button text
+            const copyBtn = document.querySelector('.copy-btn');
+            copyBtn.textContent = t.copyBtn;
+            
+            // Update IDE info
+            updateIDEInfo();
+            
+            // Update author footer
+            const authorFooter = document.getElementById('authorFooter');
+            authorFooter.innerHTML = `${t.author} <a href="https://github.com/foggysq" target="_blank" rel="noopener">Roman Torshin</a>`;
+        }
+
+        // Update IDE info when selection changes
+        function updateIDEInfo() {
+            const selectedIDE = document.getElementById('ideSelect').value;
+            const infoBox = document.getElementById('ideInfo');
+            const t = translations[currentLanguage];
+            
+            let title, text;
+            switch(selectedIDE) {
+                case 'vscode':
+                    title = t.vscodeInstructions;
+                    text = t.vscodeText;
+                    break;
+                case 'sublime':
+                    title = t.sublimeInstructions;
+                    text = t.sublimeText;
+                    break;
+                case 'phpstorm':
+                    title = t.phpstormInstructions;
+                    text = t.phpstormText;
+                    break;
+                case 'vim':
+                    title = t.vimInstructions;
+                    text = t.vimText;
+                    break;
+            }
+            
+            infoBox.innerHTML = `<strong>${title}</strong><br>${text}`;
+            updateResult();
+        }
+
+        // Update result based on selected IDE
+        function updateResult() {
+            const selectedIDE = document.getElementById('ideSelect').value;
+            const resultTextarea = document.getElementById('result');
+            
+            // Get the generated content for the selected IDE
+            let content = '';
+            switch(selectedIDE) {
+                case 'vscode':
+                    content = window.generatedSnippets?.vscode || '';
+                    break;
+                case 'sublime':
+                    content = window.generatedSnippets?.sublime || '';
+                    break;
+                case 'phpstorm':
+                    content = window.generatedSnippets?.phpstorm || '';
+                    break;
+                case 'vim':
+                    content = window.generatedSnippets?.vim || '';
+                    break;
+            }
+            
+            resultTextarea.value = content;
+        }
+
+        // Copy result to clipboard
+        function copyResult() {
+            const resultTextarea = document.getElementById('result');
+            const copyBtn = document.querySelector('.copy-btn');
+            const t = translations[currentLanguage];
+            
+            resultTextarea.select();
+            resultTextarea.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                document.execCommand('copy');
+                copyBtn.textContent = t.copied;
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = t.copyBtn;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for modern browsers
+                navigator.clipboard.writeText(resultTextarea.value).then(() => {
+                    copyBtn.textContent = t.copied;
+                    copyBtn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyBtn.textContent = t.copyBtn;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+
+        // Get selected file extensions
+        function getSelectedExtensions() {
+            const extensions = [];
+            const checkboxes = document.querySelectorAll('.file-extensions input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                extensions.push(checkbox.id);
+            });
+            return extensions;
+        }
+
+        // Check if line is inside a multi-line comment
+        function isInsideMultiLineComment(lines, currentIndex) {
+            let commentOpen = false;
+            for (let i = 0; i <= currentIndex; i++) {
+                const line = lines[i];
+                if (line.includes('/*')) {
+                    commentOpen = true;
+                }
+                if (line.includes('*/')) {
+                    commentOpen = false;
+                }
+            }
+            return commentOpen;
+        }
+
+        // Generate snippets for all IDEs
+        function createSnippets() {
+            const sourceData = document.getElementById('source').value;
+            const snippetTitle = document.getElementById('snippetTitle').value || 'Design System';
+            const selectedExtensions = getSelectedExtensions();
+            
+            if (!sourceData.trim()) {
+                alert(translations[currentLanguage].enterVariables);
+                return;
+            }
+
+            if (selectedExtensions.length === 0) {
+                alert(translations[currentLanguage].selectExtension);
+                return;
+            }
+
+            let history = {};
+            const lines = sourceData.split('\n');
+
+            // Initialize templates
+            let vscode = `// ${snippetTitle} - VS Code Snippets\n\n{`;
+            let sublime = `// ${snippetTitle} - Sublime Text Completions\n\n{\n    "scope": "${selectedExtensions.map(ext => `source.${ext}`).join(',')}",\n    "completions": [`;
+            let phpstorm = `<!-- ${snippetTitle} - PHPStorm Templates -->\n<templateSet group="${snippetTitle}" author="snippet-generator">`;
+            let vim = `# ${snippetTitle} - Vim/Neovim Snippets\n# Compatible with UltiSnips, LuaSnip, and other snippet plugins\n\n`;
+
+            // Process each line
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Skip empty lines, single-line comments, and multi-line comments
+                if (!line || 
+                    line.substring(0, 2) === '//' || 
+                    line.substring(0, 2) === '/*' ||
+                    line.substring(line.length - 2) === '*/' ||
+                    isInsideMultiLineComment(lines, i)) {
+                    continue;
+                }
+
+                const style = line.split(':');
+                if (style.length < 2) {
+                    continue;
+                }
+
+                style[0] = style[0].trim();
+                style[1] = style[1].trim();
+
+                const skipTitle = style[0].charAt(0) === '$' ? 1 : 0;
+                const skipValue = style[1].charAt(0) === '$' ? 1 : 0;
+
+                // Extract value
+                let title = style[0].substring(skipTitle);
+                let val = style[1].split(';')[0].substring(skipValue);
+
+                // Check for valid CSS property (contains semicolon)
+                if (style[1].indexOf(';') === -1 && val !== 'var(' && val !== 'linear-gradient(') {
+                    console.warn('Invalid CSS property:', style[0]);
+                    continue;
+                }
+
+				// Multiline value
+				if (val === 'var(' || val === 'linear-gradient(') {
+					val += lines[i + 1].trim() + ')';
+					console.warn(val);
+				}
+
+                // Handle multiplication operations
+                if (val.indexOf('*') > -1 && history[val.split(' ')[0].substring(skipTitle)] !== undefined) {
+                    const baseValue = history[val.split(' ')[0].substring(skipValue)].replace(/[^0-9]/g, '');
+                    const multiplier = val.split(' ')[2];
+                    val = (parseInt(baseValue) * parseInt(multiplier)) + 'px';
+                }
+
+                // Use history value if available
+                if (history[val]) {
+                    val = history[val];
+                }
+
+                // Generate VS Code Snippets
+                vscode += `\n    "${title} ${val.length < 15 ? val : val.substring(0, 12) + '...'}": {
+        "scope": "${selectedExtensions.join(',')}",
+        "prefix": [
+            "${val}",
+            "${style[0]}"${val.charAt(0) === '.' ? `,\n            "0${val}"` : ''}
+        ],
+        "body": [
+            "${skipValue ? '\\\\' : ''}${style[0]}$1"
+        ]
+    },`;
+
+                // Generate Sublime Text Completions
+                sublime += `\n        {
+            "trigger": "${val}",
+            "annotation": "${style[0]}",
+            "contents": "${skipValue ? '\\\\' : ''}${style[0]}$0",
+            "kind": "keyword"
+        },
+        {
+            "trigger": "${style[0]}",
+            "annotation": "${style[0]}",
+            "contents": "${title}$0",
+            "kind": "keyword"
+        }`;
+
+                // Add special trigger for class values
+                if (val.charAt(0) === '.') {
+                    sublime += `,\n        {
+            "trigger": "0${val}",
+            "annotation": "${style[0]}",
+            "contents": "${skipValue ? '\\\\' : ''}${style[0]}$0",
+            "kind": "keyword"
+        }`;
+                }
+
+                // Generate PHPStorm Templates
+                phpstorm += `\n    <template name="${val} ${style[0]}" value="$${style[0]}$END$" description="${snippetTitle}" toReformat="true" toShortenFQNames="true">
+        <context>
+            ${selectedExtensions.map(ext => `<option name="${ext.toUpperCase()}" value="true" />`).join('\n            ')}
+            <option name="OTHER" value="true" />
+        </context>
+    </template>
+    <template name="${style[0]} ${val}" value="$${style[0]}$END$" description="${snippetTitle}" toReformat="true" toShortenFQNames="true">
+        <context>
+            ${selectedExtensions.map(ext => `<option name="${ext.toUpperCase()}" value="true" />`).join('\n            ')}
+            <option name="OTHER" value="true" />
+        </context>
+    </template>`;
+
+                // Generate Vim Snippets (UltiSnips format)
+                vim += `snippet ${val} "${style[0]} - ${val}"
+\t${skipValue ? '\\' : ''}${style[0]}$1
+endsnippet
+
+snippet ${style[0]} "${style[0]} - ${val}"
+\t${skipValue ? '\\' : ''}${style[0]}$1
+endsnippet
+`;
+
+                // Add special trigger for class values
+                if (val.charAt(0) === '.') {
+                    vim += `snippet 0${val} "${style[0]} - ${val}"
+\t${skipValue ? '\\' : ''}${style[0]}$1
+endsnippet
+`;
+                }
+
+                // Store in history
+				if (title.startsWith('--')) {
+					history['var(' + title + ')'] = val;
+				} else {
+					history[title] = val;
+				}
+            }
+
+            // Close templates
+            sublime += `\n    ]\n}`;
+            vscode += `\n}`;
+            phpstorm += `\n</templateSet>`;
+
+            // Store generated snippets globally
+            window.generatedSnippets = {
+                vscode: vscode,
+                sublime: sublime,
+                phpstorm: phpstorm,
+                vim: vim
+            };
+
+            // Update the result display
+            updateResult();
+        }
+
+        // Use example data from placeholder
+        function useExampleData() {
+            const exampleData = `// SCSS Variables
+$primary-500: #3b82f6;
+$error-500: #ef4444;
+$btn-primary: $primary-500;
+
+// CSS Custom Properties (Native CSS Variables)
+--text-primary: #1f2937;
+--text-secondary: #6b7280;
+--text-muted: #9ca3af;
+--bg-primary: #ffffff;
+--bg-secondary: #f9fafb;
+--bg-muted: #f3f4f6;
+
+// Typography
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+
+--font-family-sans: 'Inter', system-ui, sans-serif;
+--font-family-mono: 'Fira Code', 'Monaco', monospace;
+--line-height-tight: 1.25;
+--line-height-normal: 1.5;
+--line-height-relaxed: 1.75;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+--space-1: 0.25rem;
+--space-2: 0.5rem;
+--space-3: 0.75rem;
+--space-4: 1rem;
+--space-6: 1.5rem;
+--space-8: 2rem;
+
+// Border Radius
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-full: 9999px;
+
+--radius-sm: 0.125rem;
+--radius-md: 0.375rem;
+--radius-lg: 0.5rem;
+--radius-xl: 0.75rem;
+
+// Shadows
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+--breakpoint-sm: 40rem;
+--breakpoint-md: 48rem;
+--breakpoint-lg: 64rem;
+--breakpoint-xl: 80rem;`;
+
+            document.getElementById('source').value = exampleData;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateIDEInfo();
+            
+            // Set initial copy button text
+            const copyBtn = document.querySelector('.copy-btn');
+            copyBtn.textContent = translations[currentLanguage].copyBtn;
+        });
+</script>
+</html>
